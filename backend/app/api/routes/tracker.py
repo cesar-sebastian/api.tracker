@@ -1,12 +1,16 @@
-from fastapi import APIRouter
+from app.api.dependencies.database import get_repository
+from fastapi import APIRouter, Body, Depends
+from starlette.status import HTTP_201_CREATED
 from typing import List
+from app.models.tracker import Tracker
+from app.db.repositories.tracker import TrackerRepository
 
 router = APIRouter()
 
-@router.post("/tracker")
-def create_tracker() -> List[dict]:
-    report = [
-        {"id": 1, "name": "My house", "cleaning_type": "full_clean", "price_per_hour": 29.99},
-        {"id": 2, "name": "Someone else's house", "cleaning_type": "spot_clean", "price_per_hour": 19.99}
-    ]
-    return report
+@router.post("/create", response_model=Tracker, name="tracker:create-tracker", status_code=HTTP_201_CREATED)
+async def create_tracker(
+    new_tracker: Tracker = Body(..., embed=True),
+    tracker_repo: TrackerRepository = Depends(get_repository(TrackerRepository))
+) -> Tracker:
+    tracker_created = await tracker_repo.create_tracker(new_tracker=new_tracker)
+    return tracker_created
