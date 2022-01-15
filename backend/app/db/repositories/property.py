@@ -3,7 +3,7 @@ from typing import List
 from app.models.property import Property
 
 SELECT_PROPERTY = """
-    SELECT * 
+    SELECT name, lat, lon
     FROM property;
 """
 
@@ -16,5 +16,6 @@ class PropertyRepository(BaseRepository):
         properties = await self.db.fetch_all(
             query=SELECT_PROPERTY
         )
+        
         return [Property(**l) for l in properties]
 

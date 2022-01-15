@@ -1,4 +1,3 @@
-from contextlib import nullcontext
 from typing import List
 from app.db.repositories.tracker import TrackerRepository
 from app.db.repositories.property import PropertyRepository
@@ -10,15 +9,17 @@ import datetime
 
 class ReportService():
 
-    def get_report_stay(day) -> List[Report]:
+    async def get_report_stay(
+            day: str,
+            property_repo: PropertyRepository,
+            tracker_repo: TrackerRepository
+        ) -> List[Report]:
 
-        date_from = datetime.datetime.strptime(day, "%m/%d/%y")
+        date_from = datetime.datetime.strptime(day, '%Y-%m-%d')
         date_to = date_from + datetime.timedelta(days=1)
-
-        tracker_repo: TrackerRepository = Depends(get_repository(TrackerRepository))
-        property_repo: PropertyRepository = Depends(get_repository(PropertyRepository))
-        properties = property_repo.fetch_all()
-        trackers = tracker_repo.fetch_trackers_by_day(date_from.strftime('%Y-%m-%d'), date_to.strftime('%Y-%m-%d'))
+        properties = await property_repo.fetch_all()        
+        trackers = await tracker_repo.fetch_trackers(date_from, date_to)
+        
         property_traker = {}
         
         for property in properties:            
@@ -28,7 +29,7 @@ class ReportService():
                     trackers_time.append(property.date)
                     trackers.pop(tracker)
             
-            if tracker_repo.len() > 0:
+            if len(trackers_time) > 0:
                 property_traker[property.name] = trackers_time
 
         report = []

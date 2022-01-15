@@ -4,17 +4,17 @@ from app.models.tracker import Tracker
 from typing import List
 
 CREATE_TRACKER_QUERY = """
-    INSERT INTO tracker (lat, lon, date)
-    VALUES (:lat, :lon, :date)
-    RETURNING id, lat, lon, date;
+    INSERT INTO tracker (lat, lon)
+    VALUES (:lat, :lon)
+    RETURNING id, lat, lon;
 """
 
 SELECT_TRACKER_BY_DAY = """
     SELECT * 
     FROM tracker
-    WHERE date >= :date_from
-    AND date < :date_to
-    ORDER BY date ASC;
+    WHERE created_at >= :date_from
+    AND created_at < :date_to
+    ORDER BY created_at ASC;
 """
 
 class TrackerRepository(BaseRepository):
@@ -27,7 +27,7 @@ class TrackerRepository(BaseRepository):
         tracker = await self.db.fetch_one(query=CREATE_TRACKER_QUERY, values=query_values)
         return Tracker(**tracker)
 
-    async def fetch_trackers(self, date_from: str, date_to: str) -> List[Tracker]:
+    async def fetch_trackers(self, date_from, date_to) -> List[Tracker]:
         trackers = await self.db.fetch_all(
             query=SELECT_TRACKER_BY_DAY,
             values={"date_from": date_from, 'date_to': date_to}
