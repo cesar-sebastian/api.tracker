@@ -1,4 +1,4 @@
-from backend.app.models.core import CoreModel
+from app.models.core import CoreModel
 
 class Property(CoreModel):
     name: str

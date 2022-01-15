@@ -1,20 +1,17 @@
 from typing import List
 from fastapi import APIRouter
+from app.api.services.report import ReportService
 
 router = APIRouter()
 
-@router.get("/summary-stay")
-async def get_tracker_day() -> List[dict]:
-    report = [
-        {"id": 1, "name": "My house", "cleaning_type": "full_clean", "price_per_hour": 29.99},
-        {"id": 2, "name": "Someone else's house", "cleaning_type": "spot_clean", "price_per_hour": 19.99}
-    ]
-    return report
+@router.get("/summary-stay/{day}")
+async def get_tracker_day(day) -> List[dict]:    
+    return ReportService.get_report_stay(day)
 
-@router.get("/summary-movement")
-async def get_tracker_day() -> List[dict]:
+@router.get("/summary-movement/{speed}")
+async def get_tracker_day(speed) -> List[dict]:
     report = [
-        {"id": 1, "name": "My house", "cleaning_type": "full_clean", "price_per_hour": 29.99},
-        {"id": 2, "name": "Someone else's house", "cleaning_type": "spot_clean", "price_per_hour": 19.99}
+        {"from": 1.5235, "to": 4.656225},
+        {"from": 2.36522, "to": 6.3625554}
     ]
     return report    
