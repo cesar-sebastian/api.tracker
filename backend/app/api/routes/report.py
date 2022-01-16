@@ -17,9 +17,10 @@ async def get_tracker_day(
     return await ReportService.get_report_stay(day, property_repo, tracker_repo)
 
 @router.get("/summary-movement/{speed}")
-async def get_tracker_day(speed) -> List[dict]:
-    report = [
-        {"from": 1.5235, "to": 4.656225},
-        {"from": 2.36522, "to": 6.3625554}
-    ]
-    return report    
+async def get_tracker_day(
+        day:str,
+        speed: int,
+        tracker_repo: TrackerRepository = Depends(get_repository(TrackerRepository))
+    ) -> List[dict]:
+    
+    return await ReportService.get_report_movement(day, speed, tracker_repo)

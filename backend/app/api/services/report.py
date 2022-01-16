@@ -32,10 +32,41 @@ class ReportService():
 
         report = []
         for name in property_traker:
-            time = (property_traker[name][-1] - property_traker[name][0]) / timedelta(milliseconds=1)            
+            time = (property_traker[name][-1] - property_traker[name][0]) / timedelta(milliseconds=1)  
             report.append(Report(property=name, time=time, day=day))
         
         return report
+
+    async def get_report_movement(
+            day: str,
+            speed: int,
+            tracker_repo: TrackerRepository
+        ) -> List:
+        
+        date_from = datetime.strptime(day, '%Y-%m-%d')
+        date_to = date_from + timedelta(days=1)
+        trackers = await tracker_repo.fetch_trackers(date_from, date_to)
+        result = []
+        tracker_0 = None
+        for tracker in trackers: 
+            if tracker_0 is not None:
+                distance = coordinates.distance((tracker.lat, tracker.lon),(tracker_0.lat, tracker_0.lon))
+                time_diff = (tracker.created_at - tracker_0.created_at) / timedelta(seconds=1)
+                v = distance / time_diff
+                if speed <= v:
+                    result.append({
+                        'from': {
+                            'lat': tracker_0.lat,
+                            'lon': tracker_0.lon
+                        },
+                        'to': {
+                            'lat': tracker_0.lat,
+                            'lon': tracker_0.lon
+                        }
+                    })
+        
+        return result
+
 
 
 
