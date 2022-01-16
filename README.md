@@ -2,4 +2,8 @@
 
 ## Run Project
 
-docker-compose up --build
+`docker-compose up --build`
+
+## API Doc
+
+`http://localhost:8000/docs`
