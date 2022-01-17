@@ -22,8 +22,11 @@ class ReportService():
         
         for property in properties:            
             trackers_time = []
-            for tracker in trackers:          
-                if coordinates.isProperty((property.lat, property.lon), (tracker.lat, tracker.lon)):
+            for tracker in trackers:
+                isInclude = coordinates.isProperty((property.lat, property.lon), (tracker.lat, tracker.lon))
+                print((property.lat, property.lon), (tracker.lat, tracker.lon))
+                print(isInclude)
+                if isInclude == True:
                     trackers_time.append(tracker.created_at)
                     #trackers.pop(tracker)
             

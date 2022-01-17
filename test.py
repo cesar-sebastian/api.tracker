@@ -26,7 +26,11 @@ megatlon = (-34.648806501319825, -58.37642899221854)
 micasa = (-34.644326064957106, -58.39287193144872)
 miexcasa = (-34.6179672866717, -58.44856120679429)
 
-print(haversine_vector([megatlon, megatlon], [micasa, miexcasa], unit=Unit.KILOMETERS))
+property = (-34.648872228362585, -58.376403759816014)
+tracker = (-34.63991592366364, -58.37771672692084)
+ 
+
+print(haversine_vector([property], [tracker], unit=Unit.KILOMETERS))
 
 '''
 center_point = [{'lat': -34.648806501319825, 'lng': -58.37642899221854}]

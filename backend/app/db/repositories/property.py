@@ -9,7 +9,7 @@ CREATE_PROPERTY_QUERY = """
 """
 
 SELECT_PROPERTY = """
-    SELECT name, lat, lon
+    SELECT id, name, lat, lon
     FROM property;
 """
 
