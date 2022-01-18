@@ -47,15 +47,15 @@ class ReportService():
         ) -> List:
         
         date_from = datetime.strptime(day, '%Y-%m-%d')
-        date_to = date_from + timedelta(days=1)
-        trackers = await tracker_repo.fetch_trackers(date_from, date_to)
+        date_to = date_from + timedelta(days=1)        
+        trackers = await tracker_repo.fetch_trackers(date_from, date_to)        
         result = []
         tracker_0 = None
-        for tracker in trackers: 
+        for tracker in trackers:
             if tracker_0 is not None:
-                distance = coordinates.distance((tracker.lat, tracker.lon),(tracker_0.lat, tracker_0.lon))
-                time_diff = (tracker.created_at - tracker_0.created_at) / timedelta(seconds=1)
-                v = distance / time_diff
+                distance = coordinates.distance((tracker.lat, tracker.lon),(tracker_0.lat, tracker_0.lon))                
+                time_diff = (tracker.created_at - tracker_0.created_at) / timedelta(hours=1)
+                v = distance / time_diff                
                 if speed <= v:
                     result.append({
                         'from': {
@@ -67,6 +67,7 @@ class ReportService():
                             'lon': tracker_0.lon
                         }
                     })
+            tracker_0 = tracker
         
         return result
 
